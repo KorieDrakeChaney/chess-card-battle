@@ -33,18 +33,21 @@ export const chatRouter = createTRPCRouter({
           FROM text_to_sql_agent
           WHERE question = "${input}"
           AND user = "${user.username}";`,
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
-        const { data } = response.data;
+        // Check if the response is valid JSON
+        if (typeof response.data === "object" && response.data !== null) {
+          const { data } = response.data;
 
-        if (!data?.[0]?.[0]) {
+          if (!data?.[0]?.[0]) {
+            return null;
+          }
+
+          return data[0][0];
+        } else {
+          console.error("Invalid JSON:", response.data);
           return null;
         }
-
-        return data[0][0];
       } catch (error) {
         console.error(error);
         return null;

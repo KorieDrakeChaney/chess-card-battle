@@ -62,7 +62,13 @@ const Chat = () => {
     if (isLoading) {
       const response = message;
       setMessage("");
-      mutation.mutate(response);
+      mutation.mutate(message.toString(), {
+        onError: (error) => {
+          console.error(error);
+          addMessage("Internal server error. Please try again later.");
+          setIsLoading(false);
+        },
+      });
     }
   }, [isLoading]);
 
