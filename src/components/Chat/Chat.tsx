@@ -48,6 +48,7 @@ const Chat = () => {
     const loadingQuery = async () => {
       if (isLoading) {
         const response = message;
+        setMessage("");
         try {
           const { data }: { data: { data: string } } = await axios.post(
             `/api/message`,
@@ -69,7 +70,7 @@ const Chat = () => {
     loadingQuery().catch((error) => {
       console.error(error);
     });
-  }, [isLoading, message, addMessage]);
+  }, [isLoading]);
 
   useEffect(() => {
     execute().catch((error) => {
