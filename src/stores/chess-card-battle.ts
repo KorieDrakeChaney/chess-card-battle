@@ -81,7 +81,9 @@ export const createChessCardBattleStore = (
 
     execute: async () => {
       try {
-        const { data } = await axios.get("/api/user/isStarred");
+        const { data }: { data: { isStarred: boolean } } = await axios.get(
+          "/api/user/isStarred",
+        );
         const parsedData = z
           .object({
             isStarred: z.boolean(),

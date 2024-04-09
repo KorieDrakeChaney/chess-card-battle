@@ -2,10 +2,11 @@ import axios from "axios";
 import { env } from "@/env";
 import { api } from "@/trpc/server";
 import { NextRequest } from "next/server";
-import { z } from "zod";
 
 export const POST = async (req: NextRequest) => {
-  const { message } = await req.json();
+  const { message } = await (req.json() as Promise<{
+    message: string;
+  }>);
 
   const currentUser = await api.users.getCurrentUser();
 
@@ -14,26 +15,26 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    const { data } = await axios.post(`${env.MINDSDB_URL}/api/sql/query`, {
+    const {
+      data,
+    }: {
+      data: {
+        data: Array<Array<string>>;
+      };
+    } = await axios.post(`${env.MINDSDB_URL}/api/sql/query`, {
       query: `SELECT answer
           FROM text_to_sql_agent
           WHERE question = "${message}"
           AND user = "${currentUser.username}";`,
     });
 
-    const parsedData = z
-      .object({
-        data: z.array(z.array(z.string())),
-      })
-      .parse(data);
-
-    if (!parsedData?.data?.[0]?.[0]) {
+    if (!data?.data?.[0]?.[0]) {
       return Response.json(null, { status: 404 });
     }
 
     return Response.json(
       {
-        data: parsedData.data[0][0],
+        data: data.data[0][0],
       },
 
       { status: 200 },

@@ -49,9 +49,12 @@ const Chat = () => {
       if (isLoading) {
         const response = message;
         try {
-          const { data } = await axios.post(`/api/message`, {
-            message: response,
-          });
+          const { data }: { data: { data: string } } = await axios.post(
+            `/api/message`,
+            {
+              message: response,
+            },
+          );
 
           if (data) {
             addMessage(await parse(data.data, { renderer }));
@@ -63,11 +66,15 @@ const Chat = () => {
       }
     };
 
-    loadingQuery();
+    loadingQuery().catch((error) => {
+      console.error(error);
+    });
   }, [isLoading, message, addMessage]);
 
   useEffect(() => {
-    execute();
+    execute().catch((error) => {
+      console.error(error);
+    });
   }, [execute]);
 
   return (

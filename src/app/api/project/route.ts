@@ -1,17 +1,18 @@
-import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
+
 import axios from "axios";
+import { NextRequest } from "next/server";
 
-export const GET = async () => {
-  const session = await auth();
+export const GET = async (req: NextRequest) => {
+  const currentUser = await api.users.getCurrentUser();
 
-  if (!session?.user) {
+  if (!currentUser) {
     return new Response(null, { status: 401 });
   }
 
-  const account = await api.account.getAccessTokenFromId(session.user.id!);
+  const access_token = await api.account.getAccessTokenFromId(currentUser.id);
 
-  if (!account) {
+  if (!access_token) {
     return new Response(null, { status: 401 });
   }
 
@@ -20,27 +21,22 @@ export const GET = async () => {
       `https://api.github.com/user/starred/KorieDrakeChaney/chess-card-battle`,
       {
         headers: {
-          Authorization: `token ${account.access_token}`,
+          Authorization: `token ${access_token.access_token}`,
         },
       },
     );
 
     return new Response(
       JSON.stringify({
-        isStarred: response.status === 204,
+        data: {
+          isStarred: true,
+        },
       }),
       {
         status: 200,
       },
     );
   } catch (error) {
-    return new Response(
-      JSON.stringify({
-        isStarred: false,
-      }),
-      {
-        status: 200,
-      },
-    );
+    return new Response(null, { status: 500 });
   }
 };

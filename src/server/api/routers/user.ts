@@ -107,7 +107,7 @@ export const userRouter = createTRPCRouter({
       return null;
     }
 
-    const { data } = await axios.get(
+    const { data }: { data: Array<string> } = await axios.get(
       "https://random-word-api.herokuapp.com/word?number=1",
     );
 
