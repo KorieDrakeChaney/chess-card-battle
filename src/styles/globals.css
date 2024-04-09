@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --green-light: #499488;
+    --green-dark: #1f3b46;
+
+    --orange-dark: #cf4f0e;
+    --orange-light: #feaa50;
+
+    --yellow-light: #fef7c9;
+
+    --blue-dark: #1a354a;
+    --blue-light: #83d9ea;
+
+    --pink-dark: #d14348;
+    --pink-light: #f3c3c1;
+  }
+}

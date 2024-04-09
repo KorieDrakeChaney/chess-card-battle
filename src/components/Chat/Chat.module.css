@@ -1,0 +1,8 @@
+.chat input::placeholder {
+  color: #ffffff;
+}
+
+.chatMessage a {
+  color: var(--blue-light);
+  text-decoration: underline;
+}

@@ -1,0 +1,149 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// Necessary for Next auth
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.Text
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id             String      @id @default(cuid())
+    name           String?
+    email          String?     @unique
+    emailVerified  DateTime?
+    image          String?
+    username       String?     @unique
+    accounts       Account[]
+    sessions       Session[]
+    decks          Deck[]
+    ownedCards     OwnedCard[]
+    bio            String?
+    gamesAsPlayer1 Game[]      @relation("Player1")
+    gamesAsPlayer2 Game[]      @relation("Player2")
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+model Card {
+    id          Int    @id @default(autoincrement())
+    name        String @unique
+    image       String
+    description String
+    rarity      Rarity
+    type        Type
+    cost        Int
+    tip         String
+
+    ownedCards OwnedCard[]
+}
+
+model Deck {
+    id   String @id @default(uuid())
+    name String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user   User?   @relation(fields: [userId], references: [id])
+    userId String?
+
+    deckCards DeckCard[]
+}
+
+model OwnedCard {
+    id        Int        @id @default(autoincrement())
+    quantity  Int
+    card      Card       @relation(fields: [cardId], references: [id])
+    cardId    Int
+    user      User       @relation(fields: [userId], references: [id])
+    userId    String
+    sellable  Boolean    @default(true)
+    deckCards DeckCard[]
+
+    @@unique([cardId, userId])
+}
+
+model Game {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    player1   User   @relation("Player1", fields: [player1Id], references: [id])
+    player1Id String
+
+    player2   User   @relation("Player2", fields: [player2Id], references: [id])
+    player2Id String
+
+    winnerName String?
+
+    result GameResult @default(PENDING)
+}
+
+model DeckCard {
+    deckId      String
+    quantity    Int       @default(1)
+    deck        Deck      @relation(fields: [deckId], references: [id])
+    ownedCard   OwnedCard @relation(fields: [ownedCardId], references: [id])
+    ownedCardId Int
+
+    @@id([deckId, ownedCardId])
+}
+
+enum GameResult {
+    PENDING
+    PLAYER1
+    PLAYER2
+}
+
+enum Rarity {
+    COMMON
+    UNCOMMON
+    RARE
+    EPIC
+    LEGENDARY
+}
+
+enum Type {
+    ENTITY
+    TRAP
+    SPELL
+    ACTION
+    SECRET
+}
