@@ -16,7 +16,11 @@ import { useFlags } from "flagsmith/react";
 
 const renderer = new Renderer();
 renderer.link = (href, _, text) => {
-  return `<img src="${href}"">${text}</img>`;
+  return `
+  <div>
+    <a href="${href}" target="_blank">${text}</a>
+    <img src="${href}"/>
+  </div>`;
 };
 
 const Chat = () => {
