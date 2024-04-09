@@ -28,26 +28,26 @@ export const chatRouter = createTRPCRouter({
       try {
         const response: AxiosResponse<{
           data: string[][];
-        }> = await axios.post(`${env.MINDSDB_URL}/api/sql/query`, {
-          query: `SELECT answer
+        }> = await axios.post(
+          `${env.MINDSDB_URL}/api/sql/query`,
+          {
+            query: `SELECT answer
           FROM text_to_sql_agent
           WHERE question = "${input}"
           AND user = "${user.username}";`,
-        });
+          },
+          {
+            maxContentLength: Infinity,
+          },
+        );
 
-        // Check if the response is valid JSON
-        if (typeof response.data === "object" && response.data !== null) {
-          const { data } = response.data;
+        const { data } = response.data;
 
-          if (!data?.[0]?.[0]) {
-            return null;
-          }
-
-          return data[0][0];
-        } else {
-          console.error("Invalid JSON:", response.data);
+        if (!data?.[0]?.[0]) {
           return null;
         }
+
+        return data[0][0];
       } catch (error) {
         console.error(error);
         return null;
