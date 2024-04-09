@@ -34,42 +34,36 @@ const Chat = () => {
   );
 
   const { data } = api.users.getCurrentUser.useQuery();
+  const mutation = api.chat.getReponse.useMutation();
 
   const [message, setMessage] = useState("");
 
   const handleEnter = () => {
-    if (message.length > 0) {
+    if (message.length > 0 && !isLoading) {
       setIsLoading(true);
       addMessage(message);
     }
   };
 
   useEffect(() => {
-    const loadingQuery = async () => {
-      if (isLoading) {
-        const response = message;
-        setMessage("");
-        try {
-          const { data }: { data: { data: string } } = await axios.post(
-            `/api/message`,
-            {
-              message: response,
-            },
-          );
-
-          if (data) {
-            addMessage(await parse(data.data, { renderer }));
-          }
-          setIsLoading(false);
-        } catch (error) {
-          setIsLoading(false);
-        }
+    const req = async () => {
+      if (mutation.data) {
+        addMessage(await parse(mutation.data, { renderer }));
+        setIsLoading(false);
       }
     };
 
-    loadingQuery().catch((error) => {
+    req().catch((error) => {
       console.error(error);
     });
+  }, [mutation.data]);
+
+  useEffect(() => {
+    if (isLoading) {
+      const response = message;
+      setMessage("");
+      mutation.mutate(response);
+    }
   }, [isLoading]);
 
   useEffect(() => {

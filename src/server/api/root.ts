@@ -5,6 +5,7 @@ import { ownedCardRouter } from "./routers/ownedCard";
 import { deckRouter } from "./routers/deck";
 import { gameRouter } from "./routers/game";
 import { accountRouter } from "./routers/account";
+import { chatRouter } from "./routers/chat";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   decks: deckRouter,
   games: gameRouter,
   account: accountRouter,
+  chat: chatRouter,
 });
 
 // export type definition of API
