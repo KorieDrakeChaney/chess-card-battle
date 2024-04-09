@@ -3,6 +3,8 @@ import { env } from "@/env";
 import { api } from "@/trpc/server";
 import { NextRequest } from "next/server";
 
+export const maxDuration = 15;
+
 export const POST = async (req: NextRequest) => {
   const { message } = await (req.json() as Promise<{
     message: string;
