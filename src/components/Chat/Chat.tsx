@@ -62,7 +62,7 @@ const Chat = () => {
             setIsLoading(false);
           }
         } catch (error) {
-          addMessage("Sorry, I don't understand that");
+          addMessage("Task timed out. Please try again.");
           console.error(error);
           setIsLoading(false);
         }
