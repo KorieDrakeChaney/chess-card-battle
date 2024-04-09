@@ -57,7 +57,7 @@ const Chat = () => {
           const { data }: { data: { data: string } } = await axios.post(
             `/api/chat`,
             {
-              message: response,
+              message: response.replaceAll('"', "'"),
             },
           );
 
