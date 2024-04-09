@@ -19,7 +19,6 @@ export const appRouter = createTRPCRouter({
   decks: deckRouter,
   games: gameRouter,
   account: accountRouter,
-  chat: chatRouter,
 });
 
 // export type definition of API

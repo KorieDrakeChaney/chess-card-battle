@@ -34,7 +34,6 @@ const Chat = () => {
   );
 
   const { data } = api.users.getCurrentUser.useQuery();
-  const mutation = api.chat.getReponse.useMutation();
 
   const [message, setMessage] = useState("");
 
@@ -46,30 +45,33 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const req = async () => {
-      if (mutation.data) {
-        addMessage(await parse(mutation.data, { renderer }));
-        setIsLoading(false);
+    const loadingQuery = async () => {
+      if (isLoading) {
+        const response = message;
+        setMessage("");
+        try {
+          const { data }: { data: { data: string } } = await axios.post(
+            `/api/chat`,
+            {
+              message: response,
+            },
+          );
+
+          if (data) {
+            addMessage(await parse(data.data, { renderer }));
+            setIsLoading(false);
+          }
+        } catch (error) {
+          addMessage("Sorry, I don't understand that");
+          console.error(error);
+          setIsLoading(false);
+        }
       }
     };
 
-    req().catch((error) => {
+    loadingQuery().catch((error) => {
       console.error(error);
     });
-  }, [mutation.data]);
-
-  useEffect(() => {
-    if (isLoading) {
-      const response = message;
-      setMessage("");
-      mutation.mutate(message.toString(), {
-        onError: (error) => {
-          console.error(error);
-          addMessage("Internal server error. Please try again later.");
-          setIsLoading(false);
-        },
-      });
-    }
   }, [isLoading]);
 
   useEffect(() => {
