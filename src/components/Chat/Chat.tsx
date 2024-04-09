@@ -137,7 +137,7 @@ const Chat = () => {
                       />
                     </div>
                     <div
-                      className={`${styles.chatMessage} flex w-[75%] flex-col rounded-lg p-2 ${
+                      className={`${styles.chatMessage} flex w-[75%] flex-col break-words rounded-lg p-2 ${
                         index % 2 === 0
                           ? "bg-green-light text-white"
                           : "bg-blue-dark  text-white"
@@ -187,7 +187,7 @@ const Chat = () => {
                     Please{" "}
                     <Link
                       href={"/signin"}
-                      className="font-bold text-pink-dark hover:underline"
+                      className="flex items-center justify-center font-bold text-pink-dark hover:underline "
                     >
                       sign in
                     </Link>{" "}
