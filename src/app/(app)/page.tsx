@@ -18,7 +18,6 @@ const HomePage = async () => {
             <Link
               href="/gallery"
               className="cursor-pointer text-pink-dark hover:underline"
-              target="_blank"
             >
               gallery
             </Link>{" "}
@@ -43,7 +42,6 @@ const HomePage = async () => {
             <Link
               href="/decks"
               className="cursor-pointer text-pink-dark hover:underline"
-              target="_blank"
             >
               deck
             </Link>{" "}
