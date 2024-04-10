@@ -37,7 +37,7 @@ const Chat = () => {
     ],
   );
 
-  const { data } = api.users.getCurrentUser.useQuery();
+  const { data: userData } = api.users.getCurrentUser.useQuery();
 
   const [message, setMessage] = useState("");
 
@@ -128,7 +128,7 @@ const Chat = () => {
                       <Image
                         src={
                           index % 2 === 0
-                            ? data?.image ?? "/avatar.png"
+                            ? userData?.image ?? "/avatar.png"
                             : "/logo.png"
                         }
                         alt="avatar"
@@ -156,7 +156,7 @@ const Chat = () => {
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center">
               <HiOutlineExclamation className="text-red-500" size={50} />
-              {data ? (
+              {userData ? (
                 <>
                   {!flags.mindsdb_chat.enabled ? (
                     <div>Current chat is disabled by the admin</div>
@@ -205,7 +205,7 @@ const Chat = () => {
               placeholder={
                 isStarred
                   ? "Type a message"
-                  : data
+                  : userData
                     ? "Star the repo"
                     : "Sign in to chat"
               }
