@@ -202,7 +202,13 @@ const Chat = () => {
               type="text"
               value={message}
               size={0}
-              placeholder={isStarred ? "Type a message" : "Star the repo"}
+              placeholder={
+                isStarred
+                  ? "Type a message"
+                  : data
+                    ? "Star the repo"
+                    : "Sign in to chat"
+              }
               className=" w-[10px] flex-grow rounded-2xl bg-green-light px-2 py-1 text-white outline-none sm:text-[1rem]"
               disabled={isLoading || !isOpen || !isStarred}
               onChange={(e) => {
