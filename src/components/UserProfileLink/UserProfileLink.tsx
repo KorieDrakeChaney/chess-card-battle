@@ -94,10 +94,11 @@ const UserProfileLink = ({ user }: UserProfileLinkProps) => {
         </div>
       </div>
       <div
-        className="fixed bottom-0 left-0 right-0 top-0 z-0 "
+        className="fixed bottom-0 left-0 right-0 top-0 "
         onClick={() => setIsClicked(false)}
         style={{
           display: isClicked ? "inline" : "none",
+          zIndex: 99,
         }}
       />
     </div>
