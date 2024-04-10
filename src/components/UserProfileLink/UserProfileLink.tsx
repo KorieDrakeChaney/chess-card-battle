@@ -61,6 +61,7 @@ const UserProfileLink = ({ user }: UserProfileLinkProps) => {
       <div
         className="absolute right-0 top-full  w-[150px] gap-1 rounded bg-white py-1 transition-all sm:w-[225px]"
         style={{
+          display: isClicked ? "inline" : "none",
           opacity: isClicked ? 1 : 0,
           transition: "opacity 0.2s",
           zIndex: 100,
