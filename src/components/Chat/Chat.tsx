@@ -184,13 +184,13 @@ const Chat = () => {
               ) : (
                 <div className="flex flex-col items-center justify-center">
                   <span className="flex gap-1">
-                    Please{" "}
+                    Please
                     <Link
                       href={"/signin"}
                       className="flex items-center justify-center font-bold text-pink-dark hover:underline "
                     >
                       sign in
-                    </Link>{" "}
+                    </Link>
                   </span>
                   to access the chat
                 </div>
